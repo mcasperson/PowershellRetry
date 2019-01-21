@@ -28,7 +28,7 @@ The output of the last command execution.
 Use cURL for Windows to download the latest NuGet command-line client
 C:\PS> Call-CommandWithRetries "curl.exe" @("--fail", "-O", "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe")
 #>
-function Call-CommandWithRetries
+function Invoke-CommandWithRetries
 {
     [CmdletBinding()]
     param (

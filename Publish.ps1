@@ -4,6 +4,9 @@ $PublishParams = @{
 }
 
 # There is no way to exclude files, so move the files were are interested in to a temporary location
+If (Test-Path PowershellRetry){
+    Remove-Item -Recurse PowershellRetry
+}
 mkdir PowershellRetry
 mkdir PowershellRetry/Public
 cp PowershellRetry.psd1 PowershellRetry
@@ -14,4 +17,4 @@ cp Public/Retry.ps1 PowershellRetry/Public
 Publish-Module @PublishParams
 
 # Clear the temporary files
-rm -Recurse PowershellRetry
+Remove-Item -Recurse PowershellRetry
