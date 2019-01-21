@@ -1,0 +1,1 @@
+Based on the module structure documented at http://ramblingcookiemonster.github.io/Building-A-PowerShell-Module/.
