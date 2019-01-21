@@ -2,7 +2,7 @@
 .SYNOPSIS
 Calls a shell (cmd) command with retries
 .DESCRIPTION
-The Call-CommandWithRetries function calls shell (cmd) commands using the provided parameters, with optional retries in configurable intervals upon failures.
+The Invoke-CommandWithRetries function calls shell (cmd) commands using the provided parameters, with optional retries in configurable intervals upon failures.
 .PARAMETER Command
 The command to call.
 .PARAMETER Arguments
