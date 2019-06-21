@@ -1,6 +1,11 @@
+param (
+    [string]$NuGetApiKey = $env:PowershellGalleryApiKey,
+    [string]$Path = "$(Get-Location)\PowershellRetry"
+)
+
 $PublishParams = @{
-    Path = "$(Get-Location)\PowershellRetry"
-    NuGetApiKey = $env:PowershellGalleryApiKey
+    Path = $Path
+    NuGetApiKey = $NuGetApiKey
 }
 
 # There is no way to exclude files, so move the files were are interested in to a temporary location
