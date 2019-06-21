@@ -4,7 +4,7 @@ param (
 )
 
 Install-PackageProvider Nuget -Force -Scope CurrentUser
-Install-Module –Name PowerShellGet -Force -Scope CurrentUser
+Install-Module -Name PowerShellGet -Force -Scope CurrentUser
 
 # There is no way to exclude files, so move the files were are interested in to a temporary location
 If (Test-Path PowershellRetry){
