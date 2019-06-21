@@ -17,3 +17,4 @@ Foreach($import in @($Public + $Private))
 
 #Export-ModuleMember -Function $Public.Basename
 Export-ModuleMember -Function Invoke-CommandWithRetries
+Export-ModuleMember -Function Invoke-ScriptBlockWithRetries

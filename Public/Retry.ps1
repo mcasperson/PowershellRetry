@@ -1,5 +1,72 @@
 <#
 .SYNOPSIS
+Calls a script block with retries
+.DESCRIPTION
+The Invoke-ScriptBlockWithRetries function calls a script block, retrying when an exception is thrown
+.PARAMETER ScriptBlock
+The script block to call.
+.PARAMETER RetryCount
+The maximum number of times to retry the script block
+.PARAMETER TimeoutInSecs
+The time in seconds benteen retries
+.PARAMETER SuccessMessage
+The message to print when the script block was successfully execited
+.PARAMETER FailureMessage
+The message to print when the script block was unsuccessfully execited
+.OUTPUTS
+The output of the last successful script block execution.
+#>
+function Invoke-ScriptBlockWithRetries {
+    [CmdletBinding()]
+    param (
+        [parameter(Mandatory, ValueFromPipeline)] 
+        [ValidateNotNullOrEmpty()]
+        [scriptblock] $ScriptBlock,
+        [int] $RetryCount = 3,
+        [int] $TimeoutInSecs = 30,
+        [string] $SuccessMessage = "",
+        [string] $FailureMessage = ""
+    )
+        
+    process {
+        $Attempt = 1
+        
+        do {
+            try {
+                $PreviousPreference = $ErrorActionPreference
+                $ErrorActionPreference = 'Stop'
+                Invoke-Command -ScriptBlock $ScriptBlock -OutVariable Result | Out-Null         
+                $ErrorActionPreference = $PreviousPreference
+
+                # flow control will execute the next line only if the command in the scriptblock executed without any errors
+                # if an error is thrown, flow control will go to the 'catch' block
+                if (-not [string]::IsNullOrEmpty($SuccessMessage)) {
+                    Write-Host "$SuccessMessage `n"
+                }
+                return $result
+            }
+            catch {
+                if ($Attempt -gt $RetryCount) {
+                    if (-not [string]::IsNullOrEmpty($FailureMessage)) {
+                        Write-Host "$FailureMessage! Error was $($_.exception.Message). Total retry attempts: $RetryCount"
+                    }
+                    throw $_.exception
+                }
+                else {
+                    if (-not [string]::IsNullOrEmpty($FailureMessage)) {
+                        Write-Host "[$Attempt/$RetryCount] $FailureMessage. Error was $($_.exception.Message). Retrying in $TimeoutInSecs seconds..."
+                    }
+                    Start-Sleep -Seconds $TimeoutInSecs
+                    $Attempt = $Attempt + 1
+                }
+            }
+        }
+        While ($true)        
+    }
+}
+
+<#
+.SYNOPSIS
 Calls a shell (cmd) command with retries
 .DESCRIPTION
 The Invoke-CommandWithRetries function calls shell (cmd) commands using the provided parameters, with optional retries in configurable intervals upon failures.
